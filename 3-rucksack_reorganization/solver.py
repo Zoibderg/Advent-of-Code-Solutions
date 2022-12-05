@@ -4,7 +4,7 @@ No Moudles
 
 class AocSolverDay3:
     """
-    A class for solving the Advent of Code 2022 Day 2 puzzle
+    A class for solving the Advent of Code 2022 Day 3 puzzle
     """
     def __init__(self, inputfile):
         self.input = inputfile
