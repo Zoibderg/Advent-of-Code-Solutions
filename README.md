@@ -50,4 +50,6 @@
 </a>
 <!-- AOC TILES END -->
 
-Created with [aoc-tiles](https://github.com/LiquidFun/adventofcode)
+<h5 align="center">
+<p><a href="https://github.com/LiquidFun/adventofcode">Tiles Credit: LiquidFun</a></p>
+</h5>
