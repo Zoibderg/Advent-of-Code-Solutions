@@ -145,3 +145,6 @@ cache/
 # VSCode
 .vscode/
 .vscode/settings.json
+
+# AoC Tiles
+AoC_tiles/
