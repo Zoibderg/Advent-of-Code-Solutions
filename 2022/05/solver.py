@@ -9,7 +9,7 @@ class AocSolverDay5:
     """
     def __init__(self, inputfile):
         self.input = inputfile
-        self.lines = self.read_input(self.input)
+        self.data = self.read_input(self.input)
         self.stacks = defaultdict(list)
         self.commands = None
 
@@ -24,7 +24,7 @@ class AocSolverDay5:
         """
         Parse the input file and return a the stacks and commands
         """
-        raw_stacks, raw_commands = self.lines.split('\n\n')
+        raw_stacks, raw_commands = self.data.split('\n\n')
         data = raw_stacks.split('\n')
 
         # create the stacks
