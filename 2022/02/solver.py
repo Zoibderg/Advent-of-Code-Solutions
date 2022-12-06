@@ -166,6 +166,6 @@ class AocSolverDay2:
         return self.score
 
 if __name__ == '__main__':
-    solver = AocSolverDay2('02-rock_paper_scissors/input.txt')
+    solver = AocSolverDay2('2022/02/input.txt')
     print(f"Solution Part 1: {solver.solve_p1()}")
     print(f"Solution Part 2: {solver.solve_p2()}")

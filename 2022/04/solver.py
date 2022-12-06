@@ -82,6 +82,6 @@ class AocSolverDay4:
         return overlap
 
 if __name__ == '__main__':
-    solver = AocSolverDay4('04-camp_cleanup/input.txt')
+    solver = AocSolverDay4('2022/04/input.txt')
     print(f"Solution Part 1: {solver.solve_p1()}")
     print(f"Solution Part 2: {solver.solve_p2()}")
