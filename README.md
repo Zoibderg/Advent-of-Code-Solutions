@@ -1,4 +1,7 @@
-# AoC Solutions - 2022
+<h1 align="center">
+⛄ My AoC Solutions 🎄
+</h1>
+
 <!-- AOC TILES BEGIN -->
 <h1 align="center">
   2022 - 10 ⭐
