@@ -2,6 +2,12 @@
 ⛄ My AoC Solutions 🎄
 </h1>
 
+<h1 align="center">
+<img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/w/Zoibderg/Advent-of-Code-Solutions">
+<img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/Zoibderg/Advent-of-Code-Solutions?logo=github">
+<a href="2022/.pre-commit-config.yaml"><img src="https://img.shields.io/badge/AoC%20Tiles-passed-success?logo=pre-commit&logoColor=white" alt="AoC Tiles" style="max-width:100%;"></a></p>
+</h1>
+
 <!-- AOC TILES BEGIN -->
 <h1 align="center">
   2022 - 12 ⭐
