@@ -66,6 +66,6 @@ class AocSolverDay1:
         return sum(x[1] for x in sorted_group[:3])
 
 if __name__ == '__main__':
-    solver = AocSolverDay1('1-calorie_counting/input.txt')
+    solver = AocSolverDay1('01-calorie_counting/input.txt')
     print(f"Solution Part 1: {solver.solve_p1()}")
     print(f"Solution Part 2: {solver.solve_p2()}")

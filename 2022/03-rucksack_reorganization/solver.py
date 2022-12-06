@@ -114,6 +114,6 @@ class AocSolverDay3:
 
 
 if __name__ == '__main__':
-    solver = AocSolverDay3('3-rucksack_reorganization/input.txt')
+    solver = AocSolverDay3('03-rucksack_reorganization/input.txt')
     print(f"Solution Part 1: {solver.solve_p1()}")
     print(f"Solution Part 2: {solver.solve_p2()}")
