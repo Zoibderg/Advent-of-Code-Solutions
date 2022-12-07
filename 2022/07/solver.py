@@ -2,9 +2,7 @@
 No Moudles
 """
 class AocSolverDay7:
-    """
-    A class for solving the Advent of Code 2022 Day 7 puzzle
-    """
+    """A class for solving the Advent of Code 2022 Day 7 puzzle"""
     def __init__(self, inputfile):
         self.input = inputfile
         self.data = self.read_input(self.input)
@@ -15,9 +13,7 @@ class AocSolverDay7:
 
 
     def read_input(self, file):
-        """
-        Read the input file
-        """
+        """Read the input file"""
         with open(self.input, 'r', encoding='utf-8') as file:
             return file.read()
 
@@ -35,7 +31,10 @@ class AocSolverDay7:
                 if line[0] == 'cd':
                     # change directory
                     if line[1] == '..':
-                        self.current_dir = self.current_dir.parent if self.current_dir.parent is not None else self.root
+                        if self.current_dir.parent is not None:
+                            self.current_dir = self.current_dir.parent
+                        else:
+                            self.current_dir = self.root
                     else:
                         for child in self.current_dir.children:
                             if child.key == line[1]:
@@ -61,15 +60,15 @@ class AocSolverDay7:
         # return sum of sizes
         return sum(dir.size for dir in dirs)
 
-    # update all directory sizes to include children incdluding root
     def update_dir_size(self, directory):
+        """update all directory sizes to include children incdluding root"""
         for child in directory.children:
             if child.marker == 'directory':
                 self.update_dir_size(child)
                 directory.size += child.size
 
-    # find all directories with size <= 100000
     def find_dirs_lesser(self, directory, size):
+        """find all directories with size <= size"""
         dirs = []
         for child in directory.children:
             if child.marker == 'directory':
@@ -79,6 +78,7 @@ class AocSolverDay7:
         return dirs
 
     def find_dirs_greater(self, directory, size):
+        """find all directories with size >= size"""
         available_space = 70000000 - self.root.size
         dirs = []
         for child in directory.children:
@@ -96,7 +96,8 @@ class AocSolverDay7:
 
         The total disk space available to the filesystem is 70000000.
         To run the update, you need unused space of at least 30000000.
-        You need to find a directory you can delete that will free up enough space to run the update.
+        You need to find a directory you can delete
+        that will free up enough space to run the update.
 
         Find the smallest directory that, if deleted,
         would free up enough space on the filesystem to run the update.
@@ -110,6 +111,7 @@ class AocSolverDay7:
         return min(dir.size for dir in dirs)
 
 class Directory:
+    """Directory class"""
     def __init__(self, key, parent=None):
         self.key = key
         self.marker = 'directory'
@@ -118,6 +120,7 @@ class Directory:
         self.children = []
 
 class File:
+    """File class"""
     def __init__(self, key, size, parent=None):
         self.key = key
         self.marker = 'file'
