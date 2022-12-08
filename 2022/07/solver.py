@@ -27,30 +27,10 @@ class AocSolverDay7:
             # parse line
             if line.startswith('$'):
                 # command
-                line = line[1:].strip().split(' ')
-                if line[0] == 'cd':
-                    # change directory
-                    if line[1] == '..':
-                        if self.current_dir.parent is not None:
-                            self.current_dir = self.current_dir.parent
-                        else:
-                            self.current_dir = self.root
-                    else:
-                        for child in self.current_dir.children:
-                            if child.key == line[1]:
-                                self.current_dir = child
-                                break
+                line = self.parse_command(line)
             else:
                 # determine if line is file or directory
-                line = line.strip().split(' ')
-                if line[0].isnumeric():
-                    # file
-                    self.current_dir.size += int(line[0])
-                    self.current_dir.children.append(File(line[1], int(line[0]), self.current_dir))
-
-                else:
-                    # directory
-                    self.current_dir.children.append(Directory(line[1], self.current_dir))
+                self.file_or_dir(line)
 
         # update all directory sizes to include children
         self.update_dir_size(self.root)
@@ -59,6 +39,57 @@ class AocSolverDay7:
 
         # return sum of sizes
         return sum(dir.size for dir in dirs)
+
+    def solve_p2(self):
+        """
+        Solve for Part 2:
+
+        Now, you're ready to choose a directory to delete.
+
+        The total disk space available to the filesystem is 70000000.
+        To run the update, you need unused space of at least 30000000.
+        You need to find a directory you can delete
+        that will free up enough space to run the update.
+
+        Find the smallest directory that, if deleted,
+        would free up enough space on the filesystem to run the update.
+        What is the total size of that directory?
+        """
+
+        # find all directories with size >= 30000000
+        dirs = self.find_dirs_greater(self.root, 30000000)
+
+        # return smallest directory
+        return min(dir.size for dir in dirs)
+
+    def file_or_dir(self, line):
+        """determine if line is file or directory"""
+        line = line.strip().split(' ')
+        if line[0].isnumeric():
+                    # file
+            self.current_dir.size += int(line[0])
+            self.current_dir.children.append(File(line[1], int(line[0]), self.current_dir))
+
+        else:
+                    # directory
+            self.current_dir.children.append(Directory(line[1], self.current_dir))
+
+    def parse_command(self, line):
+        """parse command line and return command"""
+        line = line[1:].strip().split(' ')
+        if line[0] == 'cd':
+                    # change directory
+            if line[1] == '..':
+                if self.current_dir.parent is not None:
+                    self.current_dir = self.current_dir.parent
+                else:
+                    self.current_dir = self.root
+            else:
+                for child in self.current_dir.children:
+                    if child.key == line[1]:
+                        self.current_dir = child
+                        break
+        return line
 
     def update_dir_size(self, directory):
         """update all directory sizes to include children incdluding root"""
@@ -87,28 +118,6 @@ class AocSolverDay7:
                     dirs.append(child)
                 dirs += self.find_dirs_greater(child , size)
         return dirs
-
-    def solve_p2(self):
-        """
-        Solve for Part 2:
-
-        Now, you're ready to choose a directory to delete.
-
-        The total disk space available to the filesystem is 70000000.
-        To run the update, you need unused space of at least 30000000.
-        You need to find a directory you can delete
-        that will free up enough space to run the update.
-
-        Find the smallest directory that, if deleted,
-        would free up enough space on the filesystem to run the update.
-        What is the total size of that directory?
-        """
-
-        # find all directories with size >= 30000000
-        dirs = self.find_dirs_greater(self.root, 30000000)
-
-        # return smallest directory
-        return min(dir.size for dir in dirs)
 
 class Directory:
     """Directory class"""
