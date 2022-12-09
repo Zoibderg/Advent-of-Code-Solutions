@@ -3,16 +3,13 @@ No Moudles
 """
 class AocSolverDay9:
     """A class for solving the Advent of Code 2022 Day 9 puzzle"""
-    def __init__(self, inputfile):
+    def __init__(self, inputfile, knots):
         self.input = inputfile
         self.data = self.read_input(self.input)
         self.lines = self.data.split('\n')
 
         # create a rope object
-        self.rope = Rope()
-
-        # create a grid of all the positions the tail of the rope visits
-        self.tail_grid = self.rope.movement_grid
+        self.rope = Rope(knots)
 
     def read_input(self, file):
         """Read the input file"""
@@ -54,6 +51,9 @@ class AocSolverDay9:
         How many positions does the tail of the rope visit at least once?
         """
 
+        # create a grid of all the positions the tail of the rope visits
+        tail_grid = self.rope.movement_grid
+
         for instruction in self.lines:
             line = instruction.strip().split(' ')
             # the instruction is in the form of "<direction> <steps>"
@@ -67,19 +67,80 @@ class AocSolverDay9:
                 # move the tail in the specified direction
                 self.rope.tail = self.rope.move_tail(self.rope.tail, self.rope.head)
 
+            # print("----------------------------------")
+            # solver.visualize()
+
         # return the number of positions the tail visits
-        return sum(self.tail_grid.values())
+        return sum(tail_grid.values())
 
     def solve_p2(self):
-        """Solver for Part 2"""
-        pass
+        """
+        Solver for Part 2
+        
+        Rather than two knots, you now must simulate a rope consisting of ten knots.
+        One knot is still the head of the rope and moves according to the series of motions.
+        Each knot further down the rope follows the knot in front of it using the same rules as before
+
+        Now, you need to keep track of the positions the new tail visits
+
+        Simulate your complete series of motions on a larger rope with ten knots.
+        How many positions does the tail of the rope visit at least once?
+        """
+        # create a grid of all the positions the tail of the rope visits
+        tail_grid = self.rope.movement_grid
+
+        for instruction in self.lines:
+            line = instruction.strip().split(' ')
+            # the instruction is in the form of "<direction> <steps>"
+            direction = line[0]
+            steps = int(line[1])
+
+            for _ in range(steps):
+                # move the head in the specified direction
+                self.rope.head = self.rope.move_head(self.rope.head, direction)
+
+                # move the knots in the specified direction
+                for knot in self.rope.knots:
+                    # print(knot)
+                    self.rope.knots[knot] = self.rope.move_knot(knot, self.rope.knots[knot])
+
+            # print("----------------------------------")
+            # solver.visualize()
+
+        # return the number of positions the tail visits
+        return sum(tail_grid.values())
+
+    def visualize(self):
+        """Visualize the grid"""
+
+        # get the min and max x and y values
+        min_x = min(self.rope.movement_grid, key=lambda x: x[0])[0]
+        max_x = max(self.rope.movement_grid, key=lambda x: x[0])[0]
+        min_y = min(self.rope.movement_grid, key=lambda x: x[1])[1]
+        max_y = max(self.rope.movement_grid, key=lambda x: x[1])[1]
+
+
+        for y in range(max_y, min_y - 1, -1):
+            for x in range(min_x, max_x + 1):
+                if (x, y) == self.rope.head:
+                    print("H", end="")
+                elif (x, y) == self.rope.tail:
+                    print("T", end="")
+                elif (x, y) in self.rope.knots.values():
+                    print("K", end="")
+                else:
+                    print(".", end="")
+            print()
+
+
 
 class Rope:
     """A class for modeling a rope"""
-    def __init__(self):
+    def __init__(self, knots):
         self.head = (0, 0)
         self.tail = (0, 0)
         self.movement_grid = {(0, 0): True}
+        self.knots = {knot: (0, 0) for knot in range(knots - 1)}
 
     def move_head(self, head, direction):
         """Move the head in the specified direction and return the new position"""
@@ -96,9 +157,11 @@ class Rope:
 
         # update the movement grid
         try:
-            pass
+            if self.movement_grid[(x, y)] == True:
+                pass
         except KeyError:
             self.movement_grid[(x, y)] = False
+
 
         return x, y
 
@@ -146,35 +209,61 @@ class Rope:
 
         return x, y
 
-    def visulize_grid(self):
+    def move_knot(self, knot, position, tail=False):
         """
-        Print the grid of positions the head and tail visit
-        
-        mark the head with an 'H'
-        mark the tail with a 'T'
-        and spots that are visited by the tail with a 'x'
+        the first knot follows the head
+        each knot after that follows the knot in front of it
+        each knot moves as if it were the tail
+        the last knot is the tail
         """
-        # find the range of the x and y coordinates
-        x_min = min(self.movement_grid.keys(), key=lambda x: x[0])[0]
-        x_max = max(self.movement_grid.keys(), key=lambda x: x[0])[0]
-        y_min = min(self.movement_grid.keys(), key=lambda x: x[1])[1]
-        y_max = max(self.movement_grid.keys(), key=lambda x: x[1])[1]
+        if knot == 0:
+            front_position = self.head
+        elif knot == len(self.knots) - 1:
+            tail = True
+            self.tail = self.knots[knot]
+            front_knot = knot - 1
+            front_position = self.knots[front_knot]
+        else:
+            # get the position of the knot in front of it
+            front_knot = knot - 1
+            front_position = self.knots[front_knot]
 
-        # print the grid
-        for y in range(y_max, y_min - 1, -1):
-            for x in range(x_min, x_max + 1):
-                if (x, y) == self.head:
-                    print('H', end='')
-                elif (x, y) == self.tail:
-                    print('T', end='')
-                elif (x, y) in self.movement_grid:
-                    print('x', end='')
-                else:
-                    print('.', end='')
-            print()
+        # move the knot
+        x, y = position
+        front_x, front_y = front_position
+
+        # if the front knot is two steps away from the knot
+        if abs(front_x - x) == 2 and front_y == y:
+            # move the knot one step in the same direction as the front knot
+            if front_x > x:
+                x += 1
+            else:
+                x -= 1
+        elif abs(front_y - y) == 2 and front_x == x:
+            # move the knot one step in the same direction as the front knot
+            if front_y > y:
+                y += 1
+            else:
+                y -= 1
+        # if the front knot and knot aren't touching and aren't in the same row or column
+        elif abs(front_x - x) > 1 or abs(front_y - y) > 1:
+            # move the knot one step diagonally
+            if front_x > x:
+                x += 1
+            else:
+                x -= 1
+            if front_y > y:
+                y += 1
+            else:
+                y -= 1
+
+        # update the movement grid
+        if tail:
+            self.movement_grid[(x, y)] = True
+
+        return x, y
 
 if __name__ == '__main__':
-    solver = AocSolverDay9('2022/09/input.txt')
-    print(f"Solution Part 1: {solver.solve_p1()}")
+    solver = AocSolverDay9('2022/09/input.txt', 10)
+    # print(f"Solution Part 1: {solver.solve_p1()}")
     # print(f"Solution Part 2: {solver.solve_p2()}")
-    # solver.rope.visulize_grid()
