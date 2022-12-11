@@ -32,6 +32,16 @@ class AocSolverDay11:
 
         return prod(sorted([monkey.inspections for monkey in self.monkies], reverse=True)[:2])
 
+    def solve_p2(self, rounds=10000):
+        """Solver for Part 2"""
+        for i in range(rounds):
+            print(f"Round {i + 1} of {rounds}...")
+            for monkey in self.monkies:
+                print(f"Monkey {monkey.key} is inspecting {len(monkey.items)} items...")
+                self._process_items(monkey, relif=False)
+
+        return prod(sorted([monkey.inspections for monkey in self.monkies], reverse=True)[:2])
+
 
     def _attendance(self):
         """Take attendance of the monkeys"""
@@ -59,11 +69,15 @@ class AocSolverDay11:
 
         return monkies
 
-    def _process_items(self, monkey):
+    def _process_items(self, monkey, relif=True):
         """Process the items for the monkey"""
         for item in monkey.items:
             item = self._get_worried(monkey, item)
-            item = self._relif(item)
+
+            if relif:
+                item = self._relif(item)
+            else:
+                item = item % prod(sorted([monkey.test for monkey in self.monkies]))
 
             if item % monkey.test == 0:
                 self.monkies[monkey.true].items.append(item)
@@ -84,10 +98,6 @@ class AocSolverDay11:
 
         return item
 
-    def solve_p2(self):
-        """Solver for Part 2"""
-        pass
-
 class Monkey:
     """A class for defining our monkey and its items"""
     def __init__(self):
@@ -100,8 +110,7 @@ class Monkey:
         self.false = int
         self.inspections = 0
 
-
 if __name__ == '__main__':
     solver = AocSolverDay11('2022/11/input.txt')
-    print(f"Solution Part 1: {solver.solve_p1()}")
-    # print(f"Solution Part 2: {solver.solve_p2()}")
+    # print(f"Solution Part 1: {solver.solve_p1()}")
+    print(f"Solution Part 2: {solver.solve_p2()}")
