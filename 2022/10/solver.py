@@ -47,7 +47,7 @@ class AocSolverDay10:
     def solve_p2(self):
         """
         Solver for Part 2
-        
+
         It seems like the X register controls the horizontal position of a sprite.
         Specifically, the sprite is 3 pixels wide, and the X register sets
         the horizontal position of the middle of that sprite.
@@ -61,9 +61,9 @@ class AocSolverDay10:
         The left-most pixel in each row is in position 0, and
         the right-most pixel in each row is in position 39.
 
-        Like the CPU, the CRT is tied closely to the clock circuit: 
-        the CRT draws a single pixel during each cycle. 
-        Representing each pixel of the screen as a #, here are the cycles 
+        Like the CPU, the CRT is tied closely to the clock circuit:
+        the CRT draws a single pixel during each cycle.
+        Representing each pixel of the screen as a #, here are the cycles
         during which the first and last pixel in each row are drawn
 
         So, by carefully timing the CPU instructions and the CRT drawing operations,
