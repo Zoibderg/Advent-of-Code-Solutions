@@ -21,13 +21,13 @@ class AocSolverDay9:
         Solver for Part 1
 
         This rope bridge creaks as you walk along it.
-        You aren't sure how old it is, or whether it can even support your weight.
+        you aren't sure how old it is, or whether it can even support your weight.
 
         It seems to support the Elves just fine, though. The bridge spans a gorge
         which was carved out by the massive river far below you.
 
-        You step carefully; as you do, the ropes stretch and twist.
-        You decide to distract yourself by modeling rope physics;
+        you step carefully; as you do, the ropes stretch and twist.
+        you decide to distract yourself by modeling rope physics;
         maybe you can even figure out where not to step.
 
         Consider a rope with a knot at each end; these knots mark the head
@@ -76,10 +76,11 @@ class AocSolverDay9:
     def solve_p2(self):
         """
         Solver for Part 2
-        
+
         Rather than two knots, you now must simulate a rope consisting of ten knots.
         One knot is still the head of the rope and moves according to the series of motions.
-        Each knot further down the rope follows the knot in front of it using the same rules as before
+        Each knot further down the rope follows the knot in front of it using the same
+        rules as before
 
         Now, you need to keep track of the positions the new tail visits
 
@@ -120,13 +121,13 @@ class AocSolverDay9:
         max_y = max(self.rope.movement_grid, key=lambda x: x[1])[1]
 
 
-        for y in range(max_y, min_y - 1, -1):
-            for x in range(min_x, max_x + 1):
-                if (x, y) == self.rope.head:
+        for yyy in range(max_y, min_y - 1, -1):
+            for xxx in range(min_x, max_x + 1):
+                if (xxx, yyy) == self.rope.head:
                     print("H", end="")
-                elif (x, y) == self.rope.tail:
+                elif (xxx, yyy) == self.rope.tail:
                     print("T", end="")
-                elif (x, y) in self.rope.knots.values():
+                elif (xxx, yyy) in self.rope.knots.values():
                     print("K", end="")
                 else:
                     print(".", end="")
@@ -144,26 +145,25 @@ class Rope:
 
     def move_head(self, head, direction):
         """Move the head in the specified direction and return the new position"""
-        x, y = head
+        xxx, yyy = head
 
         if direction == 'U':
-            y += 1
+            yyy += 1
         elif direction == 'D':
-            y -= 1
+            yyy -= 1
         elif direction == 'R':
-            x += 1
+            xxx += 1
         elif direction == 'L':
-            x -= 1
+            xxx -= 1
 
         # update the movement grid
         try:
-            if self.movement_grid[(x, y)] == True:
-                pass
+            pass
         except KeyError:
-            self.movement_grid[(x, y)] = False
+            self.movement_grid[(xxx, yyy)] = False
 
 
-        return x, y
+        return xxx, yyy
 
     def move_tail(self, tail, head):
         """
@@ -176,38 +176,38 @@ class Rope:
         Otherwise, if the head and tail aren't touching and aren't in the same row or column,
         the tail always moves one step diagonally to keep up
         """
-        x, y = tail
+        xxx, yyy = tail
         head_x, head_y = head
 
         # if the head is two steps away from the tail
-        if abs(head_x - x) == 2 and head_y == y:
+        if abs(head_x - xxx) == 2 and head_y == yyy:
             # move the tail one step in the same direction as the head
-            if head_x > x:
-                x += 1
+            if head_x > xxx:
+                xxx += 1
             else:
-                x -= 1
-        elif abs(head_y - y) == 2 and head_x == x:
+                xxx -= 1
+        elif abs(head_y - yyy) == 2 and head_x == xxx:
             # move the tail one step in the same direction as the head
-            if head_y > y:
-                y += 1
+            if head_y > yyy:
+                yyy += 1
             else:
-                y -= 1
+                yyy -= 1
         # if the head and tail aren't touching and aren't in the same row or column
-        elif abs(head_x - x) > 1 or abs(head_y - y) > 1:
+        elif abs(head_x - xxx) > 1 or abs(head_y - yyy) > 1:
             # move the tail one step diagonally
-            if head_x > x:
-                x += 1
+            if head_x > xxx:
+                xxx += 1
             else:
-                x -= 1
-            if head_y > y:
-                y += 1
+                xxx -= 1
+            if head_y > yyy:
+                yyy += 1
             else:
-                y -= 1
+                yyy -= 1
 
         # update the movement grid
-        self.movement_grid[(x, y)] = True
+        self.movement_grid[(xxx, yyy)] = True
 
-        return x, y
+        return xxx, yyy
 
     def move_knot(self, knot, position, tail=False):
         """
@@ -229,39 +229,39 @@ class Rope:
             front_position = self.knots[front_knot]
 
         # move the knot
-        x, y = position
+        xxx, yyy = position
         front_x, front_y = front_position
 
         # if the front knot is two steps away from the knot
-        if abs(front_x - x) == 2 and front_y == y:
+        if abs(front_x - xxx) == 2 and front_y == yyy:
             # move the knot one step in the same direction as the front knot
-            if front_x > x:
-                x += 1
+            if front_x > xxx:
+                xxx += 1
             else:
-                x -= 1
-        elif abs(front_y - y) == 2 and front_x == x:
+                xxx -= 1
+        elif abs(front_y - yyy) == 2 and front_x == xxx:
             # move the knot one step in the same direction as the front knot
-            if front_y > y:
-                y += 1
+            if front_y > yyy:
+                yyy += 1
             else:
-                y -= 1
+                yyy -= 1
         # if the front knot and knot aren't touching and aren't in the same row or column
-        elif abs(front_x - x) > 1 or abs(front_y - y) > 1:
+        elif abs(front_x - xxx) > 1 or abs(front_y - yyy) > 1:
             # move the knot one step diagonally
-            if front_x > x:
-                x += 1
+            if front_x > xxx:
+                xxx += 1
             else:
-                x -= 1
-            if front_y > y:
-                y += 1
+                xxx -= 1
+            if front_y > yyy:
+                yyy += 1
             else:
-                y -= 1
+                yyy -= 1
 
         # update the movement grid
         if tail:
-            self.movement_grid[(x, y)] = True
+            self.movement_grid[(xxx, yyy)] = True
 
-        return x, y
+        return xxx, yyy
 
 if __name__ == '__main__':
     solver = AocSolverDay9('2022/09/input.txt', 10)
