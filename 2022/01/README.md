@@ -1,12 +1,6 @@
 <html lang="en-us"><head>
 <meta charset="utf-8">
-<title>Day 1 - Advent of Code 2022</title>
-<!--[if lt IE 9]><script src="/static/html5.js"></script><![endif]-->
-<link href="//fonts.googleapis.com/css?family=Source+Code+Pro:300&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css">
-<link rel="stylesheet" type="text/css" href="/static/style.css?30">
-<link rel="stylesheet alternate" type="text/css" href="/static/highcontrast.css?0" title="High Contrast">
-<link rel="shortcut icon" href="/favicon.png">
-<script async="" src="//www.google-analytics.com/analytics.js"></script><script>window.addEventListener('click', function(e,s,r){if(e.target.nodeName==='CODE'&&e.detail===3){s=window.getSelection();s.removeAllRanges();r=document.createRange();r.selectNodeContents(e.target);s.addRange(r);}});</script>
+
 </head>
 
 <main>
