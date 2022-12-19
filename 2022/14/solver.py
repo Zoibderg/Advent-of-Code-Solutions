@@ -22,32 +22,63 @@ class AocSolverDay14:
 
         abyss = self.parse_input(blocked, abyss)
 
-        return self.drop_sand(blocked, abyss)
+        return self.drop_sand(blocked, abyss, 1)
 
-    def drop_sand(self, blocked, abyss):
+    def solve_p2(self):
+        """ Solver for Part 2 """
+        blocked = set()
+        abyss = 0
+
+        abyss = self.parse_input(blocked, abyss)
+
+        return self.drop_sand(blocked, abyss, 2)
+
+    def drop_sand(self, blocked, abyss, part):
         """
         Drop sand and count how many sand particles are at rest before sand
         falls into the abyss
         """
         sand_at_rest = 0
 
-        while True:
-            sand = 500
+        if part == 1:
+            # Part 1
             while True:
-                if sand.imag >= abyss:
-                    return sand_at_rest
-                if sand + 1j not in blocked:
-                    sand += 1j
-                    continue
-                if sand + 1j - 1 not in blocked:
-                    sand += 1j - 1
-                    continue
-                if sand + 1j + 1 not in blocked:
-                    sand += 1j + 1
-                    continue
+                sand = 500
+                while True:
+                    if sand.imag >= abyss:
+                        return sand_at_rest
+                    if sand + 1j not in blocked:
+                        sand += 1j
+                        continue
+                    if sand + 1j - 1 not in blocked:
+                        sand += 1j - 1
+                        continue
+                    if sand + 1j + 1 not in blocked:
+                        sand += 1j + 1
+                        continue
+                    blocked.add(sand)
+                    sand_at_rest += 1
+                    break
+
+        if part == 2:
+            # Part 2
+            while 500 not in blocked:
+                sand = 500
+                while not sand.imag >= abyss:
+                    if sand + 1j not in blocked:
+                        sand += 1j
+                        continue
+                    if sand + 1j - 1 not in blocked:
+                        sand += 1j - 1
+                        continue
+                    if sand + 1j + 1 not in blocked:
+                        sand += 1j + 1
+                        continue
+                    break
                 blocked.add(sand)
                 sand_at_rest += 1
-                break
+
+        return sand_at_rest
 
     def parse_input(self, blocked, abyss):
         """Parse the input"""
@@ -64,11 +95,8 @@ class AocSolverDay14:
                     abyss = max(abyss, y + 1)
         return abyss
 
-    def solve_p2(self):
-        """ Solver for Part 2 """
-        pass
 
 if __name__ == '__main__':
     solver = AocSolverDay14('2022/14/input.txt')
     print(f"Solution Part 1: {solver.solve_p1()}")
-    # print(f"Solution Part 2: {solver.solve_p2()}")
+    print(f"Solution Part 2: {solver.solve_p2()}")
