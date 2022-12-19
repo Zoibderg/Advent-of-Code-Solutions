@@ -2,20 +2,67 @@
 No modules
 """
 
+import itertools
+
 class AocSolverDay14:
     """A class for solving the Advent of Code 2022 Day 14 puzzle"""
     def __init__(self, inputfile):
         self.input = inputfile
-        self.data = self.read_input(self.input)
+        self.lines = self.read_input(self.input)
 
     def read_input(self, file):
         """Read the input file"""
         with open(self.input, 'r', encoding='utf-8') as file:
-            return file.read()
+            return file.readlines()
 
     def solve_p1(self):
-        """ SOlver for Part 1 """
-        pass
+        """ Solver for Part 1 """
+        blocked = set()
+        abyss = 0
+
+        abyss = self.parse_input(blocked, abyss)
+
+        return self.drop_sand(blocked, abyss)
+
+    def drop_sand(self, blocked, abyss):
+        """
+        Drop sand and count how many sand particles are at rest before sand
+        falls into the abyss
+        """
+        sand_at_rest = 0
+
+        while True:
+            sand = 500
+            while True:
+                if sand.imag >= abyss:
+                    return sand_at_rest
+                if sand + 1j not in blocked:
+                    sand += 1j
+                    continue
+                if sand + 1j - 1 not in blocked:
+                    sand += 1j - 1
+                    continue
+                if sand + 1j + 1 not in blocked:
+                    sand += 1j + 1
+                    continue
+                blocked.add(sand)
+                sand_at_rest += 1
+                break
+
+    def parse_input(self, blocked, abyss):
+        """Parse the input"""
+        # will parse the normal way as regex does not seem necessary
+        for line in self.lines:
+            line = [list(map(int, p.split(","))) for p in line.strip().split(" -> ")]
+            for (x_1, y_1), (x_2, y_2) in zip(line, line[1:]):
+                x_1, x_2 = sorted([x_1, x_2])
+                y_1, y_2 = sorted([y_1, y_2])
+                for x, y in itertools.product(range(x_1, x_2 + 1), range(y_1, y_2 + 1)):
+                    # keep x as real part
+                    # convert y to imaginary part
+                    blocked.add(x + y * 1j)
+                    abyss = max(abyss, y + 1)
+        return abyss
 
     def solve_p2(self):
         """ Solver for Part 2 """
